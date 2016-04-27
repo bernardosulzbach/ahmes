@@ -8,3 +8,7 @@ You will need Git LFS in order to get the executable from the command line.
 
 Everything here is licensed under the BSD 2-Clause license, except for the
 simulator itself.
+
+## Regarding the memory files
+
+`ones.mem` - A memory file whose bytes are all set to the value 1.
