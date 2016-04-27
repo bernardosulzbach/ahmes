@@ -21,13 +21,16 @@ class AhmesProgram(object):
         if not self.initialized:
             try:
                 with open(self.filename, 'rb') as open_file:
-                    self.bytes = open_file.read()
+                    read_bytes = open_file.read()
+                    # The first 4 bytes are not part of the program.
+                    # The remaining of the file seems to be made up of pairs of bytes of which only the first is used.
+                    self.bytes = read_bytes[4::2]
                     self.initialized = True
             except FileNotFoundError:
                 pass  # Acceptable, the class handles this exception
 
     def get_bytes(self):
-        return self.bytes[4::2]
+        return self.bytes
 
 if __name__ == '__main__':
     program = AhmesProgram('ones.mem')
