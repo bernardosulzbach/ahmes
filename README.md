@@ -1,5 +1,7 @@
 # Ahmes
 
+![Build Status](https://travis-ci.org/mafagafogigante/ahmes.svg?branch=master)
+
 Ahmes is a computer used in some computer architecture classes. There is an
 executable file in the repository. It can be ran natively on Windows or using
 Wine under Linux.
