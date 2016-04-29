@@ -1,0 +1,87 @@
+; Doubles the unsigned integer stored in bytes 128 up to 255.
+;
+; If the integer is smaller than or equal to 2^1023, the result is correct.
+; Otherwise, overflow happens and the error flag (byte 127) is set to 1.
+;
+; Constants
+; C0:      0
+; C1:      1
+; C128:  128
+;
+; Variables
+; CARRY_IN:     the carry in of the current byte
+; CARRY_OUT:    the carry out of the current byte
+; CURRENT_BYTE: the byte (copied from the array) we are working on now
+;
+; Inputs
+; 0x80...0xFF: the integer
+;
+; Outputs
+; 0x7F: error flag
+; 0x80...0xFF: (possibly) twice the integer
+
+; Load, shift, and store the current byte
+BEGIN:
+ LDA 255 ; THIS LINE HAS A MUTABLE REFERENCE
+ SHL
+ STA CURRENT_BYTE
+
+; If carry happened, increment CARRY_OUT
+PROC_ADD_CARRY_OUT_1:
+ JNC PROC_ADD_CARRY_IN
+ LDA CARRY_OUT
+ ADD C1
+ STA CARRY_OUT
+ LDA CURRENT_BYTE ; Load back the value that was in AC
+
+PROC_ADD_CARRY_IN:
+ ADD CARRY_IN
+ STA CURRENT_BYTE
+
+PROC_ADD_CARRY_OUT_2:
+ JNC HOUSEKEEPING
+ LDA CARRY_OUT
+ ADD C1
+ STA CARRY_OUT
+ LDA CURRENT_BYTE ; Load back the value that was in AC
+
+HOUSEKEEPING:
+ ; Store the CURRENT_BYTE at the proper position in the array
+ STA 255 ; THIS LINE HAS A MUTABLE REFERENCE
+
+; Carry out becomes carry in
+LDA CARRY_OUT
+STA CARRY_IN
+
+; Zero carry out
+LDA C0
+STA CARRY_OUT
+
+; Decrement the references to the current byte
+LDA 1
+SUB C1
+STA 1 ; THIS LINE MUTATES A REFERENCE
+STA 30 ; THIS LINE MUTATES A REFERENCE
+
+; If we are at 0x7F, stop
+SUB C128
+JN  HALT
+JMP BEGIN
+HALT:
+ HLT
+
+ORG 112
+
+C0:
+ DB 0
+C1:
+ DB 1
+C128:
+ DB 128
+
+CARRY_IN:
+ DB 0
+CARRY_OUT:
+ DB 0
+CURRENT_BYTE:
+ DB 0
