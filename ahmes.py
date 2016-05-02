@@ -1,6 +1,27 @@
 #!/usr/bin/python
 
 
+def is_byte(integer):
+    """
+    Returns whether or not an integer value could be stored in a byte of 8 bits.
+    :param integer: any int
+    """
+    assert isinstance(integer, int), 'integer should be an int'
+    return 0 <= integer <= 255
+
+
+def assert_is_a_valid_byte_value(value):
+    assert is_byte(value), 'the provided value is not a valid byte value'
+
+
+def to_signed_byte(value):
+    assert_is_a_valid_byte_value(value)
+    if value < 128:
+        return value
+    else:
+        return 256 - value
+
+
 def find_maximum_string_width(objects):
     maximum_so_far = 0
     for i, e in enumerate(objects):
@@ -24,33 +45,6 @@ def make_string_of_key_value_lines(keys, values):
     return '\n'.join(make_list_of_key_value_lines(keys, values))
 
 
-def is_byte(integer):
-    """
-    Returns whether or not an integer value could be stored in a byte of 8 bits.
-    :param integer: any int
-    """
-    assert isinstance(integer, int), 'integer should be an int'
-    return 0 <= integer <= 255
-
-
-class AhmesInstruction(object):
-    def __init__(self, function, mnemonic, value):
-        """
-        Constructs a new AhmesInstruction with the specified mnemonic, instruction value and operation function.
-        :param function: a function that takes an AhmesComputer as an argument
-        :param mnemonic: an uppercase string that represents the instruction
-        :param value: a valid byte value for the instruction
-        :return: an AhmesInstruction
-        """
-        assert isinstance(mnemonic, str), 'mnemonic should be a str'
-        assert mnemonic.isupper(), 'mnemonic should be uppercase'
-        assert len(mnemonic) > 0, 'mnemonic should not be empty'
-        assert is_byte(value), 'value should be a valid byte value'
-        self.function = function
-        self.mnemonic = mnemonic
-        self.value = value
-
-
 class AhmesComputer(object):
     """
     A pure Python implementation of the Ahmes computer.
@@ -64,12 +58,15 @@ class AhmesComputer(object):
         self.bytes = [0] * 256
 
     def set_ac(self, ac):
-        assert is_byte(ac), 'ac should be a valid byte value'
+        assert_is_a_valid_byte_value(ac )
         self.ac = ac
 
     def set_pc(self, pc):
-        assert is_byte(pc), 'pc should be a valid byte value'
+        assert_is_a_valid_byte_value(pc)
         self.pc = pc
+
+    def increment_pc(self):
+        self.pc = (self.pc + 1) % 256
 
     def load_program(self, program):
         assert isinstance(program, AhmesProgram), 'program should be an AhmesProgram'
@@ -130,6 +127,53 @@ class AhmesProgram(object):
         keys = [i for i in range(256)]
         values = self.bytes
         return make_string_of_key_value_lines(keys, values)
+
+
+class AhmesInstruction(object):
+    def __init__(self, function, mnemonic, value):
+        """
+        Constructs a new AhmesInstruction with the specified mnemonic, instruction value and operation function.
+        :param function: a function that takes an AhmesComputer as an argument
+        :param mnemonic: an uppercase string that represents the instruction
+        :param value: a valid byte value for the instruction
+        :return: an AhmesInstruction
+        """
+        assert isinstance(mnemonic, str), 'mnemonic should be a str'
+        assert mnemonic.isupper(), 'mnemonic should be uppercase'
+        assert len(mnemonic) > 0, 'mnemonic should not be empty'
+        assert_is_a_valid_byte_value(value)
+        self.function = function
+        self.mnemonic = mnemonic
+        self.value = value
+
+
+class SingleByteAhmesInstruction(AhmesInstruction):
+    def __init__(self, function, mnemonic, value):
+        def wrapped_function(ahmes_computer):
+            ahmes_computer.increment_pc()
+            function(ahmes_computer)
+
+        super().__init__(wrapped_function, mnemonic, value)
+
+
+class TwoByteAhmesInstruction(AhmesInstruction):
+    def __init__(self, function, mnemonic, value):
+        def wrapped_function(ahmes_computer):
+            ahmes_computer.increment_pc()
+            operand = ahmes_computer.retrieve_current_byte()
+            ahmes_computer.increment_pc()
+            function(ahmes_computer, operand)
+
+        super().__init__(wrapped_function, mnemonic, value)
+
+
+class AhmesJumpInstruction(TwoByteAhmesInstruction):
+    def __init__(self, predicate, mnemonic, value):
+        def wrapped_function(ahmes_computer, operand):
+            if predicate(ahmes_computer):
+                ahmes_computer.set_pc(operand)
+
+        super().__init__(wrapped_function, mnemonic, value)
 
 
 if __name__ == '__main__':

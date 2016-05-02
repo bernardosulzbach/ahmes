@@ -21,3 +21,31 @@ class TestAhmesProgram(unittest.TestCase):
         mixed_list_of_the_same_size = [i for i in range(byte_list_size)]
         mixed_list_of_the_same_size[-1] = '255'
         self.assertRaises(AssertionError, program.set_bytes, mixed_list_of_the_same_size)
+
+
+class TestAhmesComputer(unittest.TestCase):
+    def test_pc_should_start_as_a_valid_byte(self):
+        computer = ahmes.AhmesComputer()
+        self.assertTrue(ahmes.is_byte(computer.pc))
+
+    def test_increment_pc_should_never_invalidate_pc(self):
+        computer = ahmes.AhmesComputer()
+        for i in range(1024):
+            computer.increment_pc()
+            self.assertTrue(ahmes.is_byte(computer.pc))
+
+    def test_increment_pc_should_mutate_pc(self):
+        computer = ahmes.AhmesComputer()
+        for i in range(1024):
+            old_pc = computer.pc
+            computer.increment_pc()
+            self.assertNotEqual(old_pc, computer.pc)
+
+
+class TestByteMath(unittest.TestCase):
+    def test_to_signed_byte(self):
+        for i in range(256):
+            if i < 128:
+                self.assertEqual(i, ahmes.to_signed_byte(i))
+            else:
+                self.assertEqual(256 - i, ahmes.to_signed_byte(i))
