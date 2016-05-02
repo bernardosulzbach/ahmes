@@ -33,6 +33,24 @@ def is_byte(integer):
     return 0 <= integer <= 255
 
 
+class AhmesInstruction(object):
+    def __init__(self, function, mnemonic, value):
+        """
+        Constructs a new AhmesInstruction with the specified mnemonic, instruction value and operation function.
+        :param function: a function that takes an AhmesComputer as an argument
+        :param mnemonic: an uppercase string that represents the instruction
+        :param value: a valid byte value for the instruction
+        :return: an AhmesInstruction
+        """
+        assert isinstance(mnemonic, str), 'mnemonic should be a str'
+        assert mnemonic.isupper(), 'mnemonic should be uppercase'
+        assert len(mnemonic) > 0, 'mnemonic should not be empty'
+        assert is_byte(value), 'value should be a valid byte value'
+        self.function = function
+        self.mnemonic = mnemonic
+        self.value = value
+
+
 class AhmesComputer(object):
     """
     A pure Python implementation of the Ahmes computer.
