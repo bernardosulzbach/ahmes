@@ -2,6 +2,7 @@
 
 import unittest
 import ahmes
+import ahmes_math
 
 
 class TestAhmesProgram(unittest.TestCase):
@@ -26,13 +27,13 @@ class TestAhmesProgram(unittest.TestCase):
 class TestAhmesComputer(unittest.TestCase):
     def test_pc_should_start_as_a_valid_byte(self):
         computer = ahmes.AhmesComputer()
-        self.assertTrue(ahmes.is_byte(computer.pc))
+        self.assertTrue(ahmes_math.is_byte(computer.pc))
 
     def test_increment_pc_should_never_invalidate_pc(self):
         computer = ahmes.AhmesComputer()
         for i in range(1024):
             computer.increment_pc()
-            self.assertTrue(ahmes.is_byte(computer.pc))
+            self.assertTrue(ahmes_math.is_byte(computer.pc))
 
     def test_increment_pc_should_mutate_pc(self):
         computer = ahmes.AhmesComputer()
@@ -41,11 +42,6 @@ class TestAhmesComputer(unittest.TestCase):
             computer.increment_pc()
             self.assertNotEqual(old_pc, computer.pc)
 
-
-class TestByteMath(unittest.TestCase):
-    def test_to_signed_byte(self):
+    def test_resolve_ahmes_instruction_should_resolve_all_valid_bytes(self):
         for i in range(256):
-            if i < 128:
-                self.assertEqual(i, ahmes.to_signed_byte(i))
-            else:
-                self.assertEqual(256 - i, ahmes.to_signed_byte(i))
+            self.assertIsInstance(ahmes.resolve_ahmes_instruction(i), ahmes.AhmesInstruction)
