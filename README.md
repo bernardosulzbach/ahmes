@@ -1,6 +1,7 @@
 # Ahmes
 
 ![Build Status](https://travis-ci.org/mafagafogigante/ahmes.svg?branch=master)
+[![codecov](https://codecov.io/gh/mafagafogigante/ahmes/branch/master/graph/badge.svg)](https://codecov.io/gh/mafagafogigante/ahmes)
 
 Ahmes is a computer used in some computer architecture classes. There is an
 executable file in the repository. It can be ran natively on Windows or using
