@@ -1,14 +1,17 @@
-# pretty much copy and paste from Travis docs
-# testing on three versions only to be considerate with their servers
+# Testing on only three versions to be considerate with their servers
 language: python
 python:
   - "3.3"
   - "3.4"
   - "3.5"
-# command to install dependencies
-# install: "pip install -r requirements.txt"
-# command to run tests
-script: nosetests
+
+# Install the dependencies
+install:
+  pip install codecov
+
+# Run the tests
+script:
+  nosetests
 
 after_success:
-      - bash <(curl -s https://codecov.io/bash)
+  codecov
