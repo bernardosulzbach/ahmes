@@ -23,11 +23,11 @@ There are also two registers: the accumulator (AC) and the program counter (PC).
 
 The computer also has five indicators:
 
-**N** - negative, set if the last operation produced a negative result
-**Z** - zero, set if the last operation produced zero
-**V** - overflow, set if the last operation resulted in an overflow
-**C** - carry, set if the last operation resulted in a carry-out
-**B** - borrow, set if the last operation resulted in a borrow
+    N - negative, set if the last operation produced a negative result
+    Z - zero,     set if the last operation produced zero
+    V - overflow, set if the last operation resulted in an overflow
+    C - carry,    set if the last operation resulted in a carry-out
+    B - borrow,   set if the last operation resulted in a borrow
 
 ## Instruction List
 
@@ -53,10 +53,10 @@ The computer also has five indicators:
 
 ### Bitwise Instructions
 
-    SHR - shifts the AC one bit to the right
-    SHL - shifts the AC one bit to the left
+    SHR - shifts  the AC one bit to the right
+    SHL - shifts  the AC one bit to the left
     ROR - rotates the AC one bit to the right (the LSB becomes the MSB)
-    ROL - rotates the AC one bit to the left (the MSB becomes the LSB)
+    ROL - rotates the AC one bit to the left  (the MSB becomes the LSB)
 
 ### Jump Instructions
 
@@ -69,15 +69,15 @@ PC to X are practically the same thing here.
 
 #### Conditional Jumps
 
-    JN  ADDRESS - if N, jumps to ADDRESS
+    JN  ADDRESS - if N,     jumps to ADDRESS
     JP  ADDRESS - if not N, jumps to ADDRESS
-    JV  ADDRESS - if V, jumps to ADDRESS
+    JV  ADDRESS - if V,     jumps to ADDRESS
     JNV ADDRESS - if not V, jumps to ADDRESS
-    JZ  ADDRESS - if Z, jumps to ADDRESS
+    JZ  ADDRESS - if Z,     jumps to ADDRESS
     JNZ ADDRESS - if not Z, jumps to ADDRESS
-    JC  ADDRESS - if C, jumps to ADDRESS
+    JC  ADDRESS - if C,     jumps to ADDRESS
     JNC ADDRESS - if not C, jumps to ADDRESS
-    JB  ADDRESS - if B, jumps to ADDRESS
+    JB  ADDRESS - if B,     jumps to ADDRESS
     JNB ADDRESS - if not B, jumps to ADDRESS
 
 ### Halting Instructions
@@ -86,7 +86,7 @@ PC to X are practically the same thing here.
 
 ### Notation
 
-    MSB - most significant bit
+    MSB - most  significant bit
     LSB - least significant bit
 
 ## Regarding the memory files
