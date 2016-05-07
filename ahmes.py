@@ -37,6 +37,8 @@ class AhmesComputer(object):
         self.set_ac(ac)  # Should reuse the AC setter so that the validation step is not duplicated
         self.set_pc(pc)  # Same for PC
         self.bytes = [0] * 256
+        self.instructions = 0
+        self.memory_accesses = 0
 
     def set_ac(self, ac):
         ahmes_math.assert_is_a_valid_byte_value(ac)
@@ -55,6 +57,26 @@ class AhmesComputer(object):
 
     def advance(self):
         pass
+
+    def read_byte(self, address):
+        """
+        Reads the byte at the specified address, incrementing the number of memory accesses.
+        :param address: a valid byte value
+        :return: the byte at the specified address
+        """
+        assert ahmes_math.assert_is_a_valid_byte_value(address)
+        self.memory_accesses += 1
+        return self.bytes[address]
+
+    def write_byte(self, address, value):
+        """
+        Writes the specified byte value in the specified address, incrementing the number of memory accesses.
+        :param address: a valid byte value
+        :param value: a valid byte value
+        """
+        assert ahmes_math.assert_is_a_valid_byte_value(address)
+        self.bytes[address] = value
+        self.memory_accesses += 1
 
     def __str__(self):
         keys = ['AC', 'PC']
