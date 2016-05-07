@@ -43,14 +43,14 @@ The computer also has five indicators:
 
 ### Logic Instructions
 
-    AND
-    OR
-    NOT
+    AND ADDRESS - bitwise AND with the byte at ADDRESS
+    OR  ADDRESS - bitwise OR  with the byte at ADDRESS
+    NOT         - bitwise NOT
 
 ### Mathematical Instructions
 
-    ADD
-    SUB
+    ADD ADDRESS - two's complement addition    with the byte at ADDRESS
+    SUB ADDRESS - two's complement subtraction with the byte at ADDRESS
 
 ### Bitwise Instructions
 
