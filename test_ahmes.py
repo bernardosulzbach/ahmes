@@ -35,6 +35,18 @@ class TestAhmesComputer(unittest.TestCase):
             computer.increment_pc()
             self.assertTrue(ahmes_math.is_byte(computer.pc))
 
+    def test_load_byte_should_increment_memory_accesses(self):
+        computer = ahmes.AhmesComputer()
+        old_memory_accesses = computer.memory_accesses
+        computer.load_byte(1)
+        self.assertEqual(old_memory_accesses + 1, computer.memory_accesses)
+
+    def test_store_byte_should_increment_memory_accesses(self):
+        computer = ahmes.AhmesComputer()
+        old_memory_accesses = computer.memory_accesses
+        computer.store_byte(1, 1)
+        self.assertEqual(old_memory_accesses + 1, computer.memory_accesses)
+
     def test_increment_pc_should_mutate_pc(self):
         computer = ahmes.AhmesComputer()
         for i in range(1024):

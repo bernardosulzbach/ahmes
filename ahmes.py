@@ -58,23 +58,24 @@ class AhmesComputer(object):
     def advance(self):
         pass
 
-    def read_byte(self, address):
+    def load_byte(self, address):
         """
-        Reads the byte at the specified address, incrementing the number of memory accesses.
+        Loads the byte at the specified address, incrementing the number of memory accesses.
         :param address: a valid byte value
         :return: the byte at the specified address
         """
-        assert ahmes_math.assert_is_a_valid_byte_value(address)
+        ahmes_math.assert_is_a_valid_byte_value(address)
         self.memory_accesses += 1
         return self.bytes[address]
 
-    def write_byte(self, address, value):
+    def store_byte(self, address, value):
         """
-        Writes the specified byte value in the specified address, incrementing the number of memory accesses.
+        Stores the specified byte value in the specified address, incrementing the number of memory accesses.
         :param address: a valid byte value
         :param value: a valid byte value
         """
-        assert ahmes_math.assert_is_a_valid_byte_value(address)
+        ahmes_math.assert_is_a_valid_byte_value(address)
+        ahmes_math.assert_is_a_valid_byte_value(value)
         self.bytes[address] = value
         self.memory_accesses += 1
 
