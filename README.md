@@ -30,6 +30,11 @@ The computer also has five indicators:
     C - carry,    set if the last operation resulted in a carry-out
     B - borrow,   set if the last operation resulted in a borrow
 
+## Notation
+
+    MSB - most  significant bit
+    LSB - least significant bit
+
 ## Instruction List
 
 ### No-ops
@@ -85,10 +90,49 @@ PC to X are practically the same thing here.
 
     HLT - halts the program execution
 
-### Notation
+## Instruction Table
 
-    MSB - most  significant bit
-    LSB - least significant bit
+When the program counter points to a byte with a code, the instruction to be
+executed is selected according to the following table.
+
+Each instruction is indicated by a byte value in the range [Code, Maximum Code].
+However, if you run the program with the `--pedantic` flag only Code is
+considered a valid identification code for the instruction and all other codes
+are mapped into NOPs.
+
+|Code|Maximum Code|Mnemonic|
+|----|------------|--------|
+|0   |15          |NOP     |
+|16  |31          |STA     |
+|32  |47          |LDA     |
+|48  |63          |ADD     |
+|64  |79          |OR      |
+|80  |95          |AND     |
+|96  |111         |NOT     |
+|112 |127         |SUB     |
+|128 |143         |JMP     |
+|144 |147         |JN      |
+|148 |151         |JP      |
+|152 |155         |JV      |
+|156 |159         |JNV     |
+|160 |163         |JZ      |
+|164 |175         |JNZ     |
+|176 |179         |JC      |
+|180 |183         |JNC     |
+|184 |187         |JB      |
+|188 |223         |JNB     |
+|224 |224         |SHR     |
+|225 |225         |SHL     |
+|226 |226         |ROR     |
+|227 |239         |ROL     |
+|240 |255         |HLT     |
+
+## Flags
+
+### `--pedantic`
+
+Only the first code value is mapped to the instruction, all other instruction
+codes that would map to the instruction will then map to NOP.
 
 ## Regarding the memory files
 
