@@ -83,3 +83,19 @@ class TestByteMath(unittest.TestCase):
                 self.assertEqual(i, ahmes_math.to_signed_byte(i))
             else:
                 self.assertEqual(256 - i, ahmes_math.to_signed_byte(i))
+
+    def test_shift_left_should_always_return_a_valid_byte(self):
+        for i in range(256):
+            self.assertTrue(ahmes_math.is_byte(ahmes_math.shift_left(i)))
+
+    def test_shift_left_should_double_nonnegative_values(self):
+        for i in range(127):
+            self.assertEqual(2 * i, ahmes_math.shift_left(i))
+
+    def test_shift_right_should_always_return_a_valid_byte(self):
+        for i in range(256):
+            self.assertTrue(ahmes_math.is_byte(ahmes_math.shift_right(i)))
+
+    def test_shift_right_should_halve_nonnegative_values(self):
+        for i in range(127):
+            self.assertEqual(i // 2, ahmes_math.shift_right(i))

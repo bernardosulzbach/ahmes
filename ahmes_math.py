@@ -17,3 +17,11 @@ def to_signed_byte(value):
         return value
     else:
         return 256 - value
+
+
+def shift_left(value):
+    return (value << 1) & 0xFF
+
+
+def shift_right(value):
+    return value >> 1
