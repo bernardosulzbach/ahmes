@@ -99,3 +99,19 @@ class TestByteMath(unittest.TestCase):
     def test_shift_right_should_halve_nonnegative_values(self):
         for i in range(127):
             self.assertEqual(i // 2, ahmes_math.shift_right(i))
+
+    def test_rotate_left_should_always_return_a_valid_byte(self):
+        for i in range(256):
+            self.assertTrue(ahmes_math.is_byte(ahmes_math.rotate_left(i)))
+
+    def test_rotate_left_should_equal_shift_left_for_bytes_with_the_most_significant_bit_unset(self):
+        for i in range(127):
+            self.assertEqual(ahmes_math.shift_left(i), ahmes_math.rotate_left(i))
+
+    def test_rotate_right_should_always_return_a_valid_byte(self):
+        for i in range(256):
+            self.assertTrue(ahmes_math.is_byte(ahmes_math.rotate_right(i)))
+
+    def test_rotate_right_should_equal_shift_right_for_bytes_with_the_least_significant_bit_unset(self):
+        for i in range(0, 256, 2):
+            self.assertEqual(ahmes_math.shift_right(i), ahmes_math.rotate_right(i))
