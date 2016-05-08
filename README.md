@@ -96,9 +96,6 @@ When the program counter points to a byte with a code, the instruction to be
 executed is selected according to the following table.
 
 Each instruction is indicated by a byte value in the range [Code, Maximum Code].
-However, if you run the program with the `--pedantic` flag only Code is
-considered a valid identification code for the instruction and all other codes
-are mapped into NOPs.
 
 |Code|Maximum Code|Mnemonic|
 |----|------------|--------|
