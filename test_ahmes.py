@@ -54,6 +54,21 @@ class TestAhmesComputer(unittest.TestCase):
             computer.increment_pc()
             self.assertNotEqual(old_pc, computer.pc)
 
-    def test_resolve_ahmes_instruction_should_resolve_all_valid_bytes(self):
-        for i in range(256):
-            self.assertIsInstance(ahmes.resolve_ahmes_instruction(i), ahmes.AhmesInstruction)
+    def test_store_function_changes_only_one_byte(self):
+        chosen_value = 127
+        chosen_address = 7
+        computer = ahmes.AhmesComputer()
+        computer.ac = chosen_value
+        ahmes.store_function(computer, chosen_address)
+        for i, byte in enumerate(computer.bytes):
+            if i == chosen_address:
+                self.assertEqual(chosen_value, byte)
+            else:
+                self.assertEqual(0, byte)  # All other bytes should still be zero
+
+    def test_store_function_increments_memory_accesses(self):
+        computer = ahmes.AhmesComputer()
+        memory_accesses_before_store = computer.memory_accesses
+        ahmes.store_function(computer, 128)
+        memory_accesses_after_store = computer.memory_accesses
+        self.assertEqual(memory_accesses_before_store + 1, memory_accesses_after_store)

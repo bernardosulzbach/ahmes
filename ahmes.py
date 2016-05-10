@@ -227,9 +227,20 @@ def no_op_function(ahmes_computer):
     pass
 
 
+def store_function(ahmes_computer, address):
+    """
+    The function of the store instruction. Stores the value at the accumulator at the address using store_byte.
+    :param ahmes_computer: an AhmesComputer
+    :param address: a valid address
+    :return: None
+    """
+    ahmes_math.assert_is_a_valid_byte_value(address)
+    ahmes_computer.store_byte(address, ahmes_computer.ac)
+
+
 def make_ahmes_instruction_index(pedantic):
     instruction_list = [SingleByteAhmesInstruction(no_op_function, 'NOP', 0),
-                        TwoByteAhmesInstruction(no_op_function, 'STA', 16),
+                        TwoByteAhmesInstruction(store_function, 'STA', 16),
                         TwoByteAhmesInstruction(no_op_function, 'LDA', 32),
                         TwoByteAhmesInstruction(no_op_function, 'ADD', 48),
                         TwoByteAhmesInstruction(no_op_function, 'OR', 64),
