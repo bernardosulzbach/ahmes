@@ -89,3 +89,31 @@ class TestAhmesComputer(unittest.TestCase):
         memory_accesses_after_load = computer.memory_accesses
         ahmes.load_function(computer, 128)
         self.assertEqual(memory_accesses_before_load + 1, memory_accesses_after_load)
+
+    def test_shift_right_does_not_increment_memory_accesses(self):
+        computer = ahmes.AhmesComputer()
+        memory_accesses_before_shift = computer.memory_accesses
+        ahmes.shift_right_function(computer)
+        memory_accesses_after_shift = computer.memory_accesses
+        self.assertEqual(memory_accesses_before_shift, memory_accesses_after_shift)
+
+    def test_shift_left_does_not_increment_memory_accesses(self):
+        computer = ahmes.AhmesComputer()
+        memory_accesses_before_shift = computer.memory_accesses
+        ahmes.shift_left_function(computer)
+        memory_accesses_after_shift = computer.memory_accesses
+        self.assertEqual(memory_accesses_before_shift, memory_accesses_after_shift)
+
+    def test_rotate_right_does_not_increment_memory_accesses(self):
+        computer = ahmes.AhmesComputer()
+        memory_accesses_before_rotation = computer.memory_accesses
+        ahmes.rotate_right_function(computer)
+        memory_accesses_after_rotation = computer.memory_accesses
+        self.assertEqual(memory_accesses_before_rotation, memory_accesses_after_rotation)
+
+    def test_rotate_left_does_not_increment_memory_accesses(self):
+        computer = ahmes.AhmesComputer()
+        memory_accesses_before_rotation = computer.memory_accesses
+        ahmes.rotate_left_function(computer)
+        memory_accesses_after_rotation = computer.memory_accesses
+        self.assertEqual(memory_accesses_before_rotation, memory_accesses_after_rotation)

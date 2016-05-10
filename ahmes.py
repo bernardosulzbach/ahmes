@@ -249,6 +249,22 @@ def load_function(ahmes_computer, address):
     ahmes_computer.load_byte(address)
 
 
+def shift_right_function(ahmes_computer):
+    ahmes_computer.ac = ahmes_math.shift_right(ahmes_computer.ac)
+
+
+def shift_left_function(ahmes_computer):
+    ahmes_computer.ac = ahmes_math.shift_left(ahmes_computer.ac)
+
+
+def rotate_right_function(ahmes_computer):
+    ahmes_computer.ac = ahmes_math.rotate_right(ahmes_computer.ac)
+
+
+def rotate_left_function(ahmes_computer):
+    ahmes_computer.ac = ahmes_math.rotate_left(ahmes_computer.ac)
+
+
 def make_ahmes_instruction_index(pedantic):
     instruction_list = [SingleByteAhmesInstruction(no_op_function, 'NOP', 0),
                         TwoByteAhmesInstruction(store_function, 'STA', 16),
@@ -269,10 +285,10 @@ def make_ahmes_instruction_index(pedantic):
                         AhmesJumpInstruction(no_op_function, 'JNC', 180),
                         AhmesJumpInstruction(no_op_function, 'JB', 184),
                         AhmesJumpInstruction(no_op_function, 'JNB', 188),
-                        SingleByteAhmesInstruction(no_op_function, 'SHR', 224),
-                        SingleByteAhmesInstruction(no_op_function, 'SHL', 225),
-                        SingleByteAhmesInstruction(no_op_function, 'ROR', 226),
-                        SingleByteAhmesInstruction(no_op_function, 'ROL', 227),
+                        SingleByteAhmesInstruction(shift_right_function, 'SHR', 224),
+                        SingleByteAhmesInstruction(shift_left_function, 'SHL', 225),
+                        SingleByteAhmesInstruction(rotate_right_function, 'ROR', 226),
+                        SingleByteAhmesInstruction(rotate_left_function, 'ROL', 227),
                         SingleByteAhmesInstruction(no_op_function, 'HLT', 240)]
     instruction_index = [None] * 256
     for instruction in instruction_list:
