@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import ahmes_math
 
 
@@ -334,11 +332,3 @@ def resolve_ahmes_instruction(value):
     :return: an AhmesInstruction
     """
     return ahmes_instructions[value]
-
-
-if __name__ == '__main__':
-    computer = AhmesComputer(16, 32)
-    print(str(computer))
-    ahmes_program = AhmesProgram.from_binary_file('ones.mem')
-    ahmes_program.set_bytes(ahmes_program.get_bytes())
-    print(str(ahmes_program))
