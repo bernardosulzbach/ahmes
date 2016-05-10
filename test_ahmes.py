@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import unittest
 import ahmes
 import ahmes_math
