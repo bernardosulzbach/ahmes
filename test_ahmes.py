@@ -1,9 +1,10 @@
-import unittest
+from unittest import TestCase
+
 import ahmes
 import ahmes_math
 
 
-class TestAhmesProgram(unittest.TestCase):
+class TestAhmesProgram(TestCase):
     def test_set_bytes_should_assert_the_list_is_of_the_correct_size(self):
         program = ahmes.AhmesProgram.from_binary_file('ones.mem')
         byte_list = program.get_bytes()
@@ -22,7 +23,7 @@ class TestAhmesProgram(unittest.TestCase):
         self.assertRaises(AssertionError, program.set_bytes, mixed_list_of_the_same_size)
 
 
-class TestAhmesComputer(unittest.TestCase):
+class TestAhmesComputer(TestCase):
     def test_pc_should_start_as_a_valid_byte(self):
         computer = ahmes.AhmesComputer()
         self.assertTrue(ahmes_math.is_byte(computer.pc))

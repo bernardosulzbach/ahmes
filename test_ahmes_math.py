@@ -1,10 +1,9 @@
-#!/usr/bin/python
+from unittest import TestCase
 
-import unittest
 import ahmes_math
 
 
-class TestByteMath(unittest.TestCase):
+class TestByteMath(TestCase):
     def test_is_byte_should_raise_an_assertion_error_if_the_value_is_not_an_int(self):
         self.assertRaises(AssertionError, ahmes_math.is_byte, '')
         self.assertRaises(AssertionError, ahmes_math.is_byte, '0')

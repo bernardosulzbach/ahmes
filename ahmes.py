@@ -279,7 +279,7 @@ def halt_function(ahmes_computer):
     ahmes_computer.running = False
 
 
-def make_ahmes_instruction_index(pedantic):
+def _make_ahmes_instruction_index():
     instruction_list = [SingleByteAhmesInstruction(no_op_function, 'NOP', 0),
                         TwoByteAhmesInstruction(store_function, 'STA', 16),
                         TwoByteAhmesInstruction(load_function, 'LDA', 32),
@@ -307,28 +307,38 @@ def make_ahmes_instruction_index(pedantic):
     instruction_index = [None] * 256
     for instruction in instruction_list:
         instruction_index[instruction.code] = instruction
-    if pedantic:
-        no_op_instruction = instruction_index[0]
-        for i, e in enumerate(instruction_index):
-            if e is None:
-                instruction_index[i] = no_op_instruction
-    else:
-        last_valid_instruction = instruction_index[0]
-        for i, e in enumerate(instruction_index):
-            if e is None:
-                instruction_index[i] = last_valid_instruction
-            else:
-                last_valid_instruction = e
+
+    last_valid_instruction = instruction_index[0]
+    for i, e in enumerate(instruction_index):
+        if e is None:
+            instruction_index[i] = last_valid_instruction
+        else:
+            last_valid_instruction = e
     return instruction_index
 
 
-ahmes_instructions = make_ahmes_instruction_index(True)
+ahmes_instructions = _make_ahmes_instruction_index()
 
 
-def resolve_ahmes_instruction(value):
+def resolve_ahmes_instruction_from_byte(value, pedantic):
     """
     Resolves a byte code into an AhmesInstruction.
     :param value: a valid byte value
+    :param pedantic: whether or not only the default code of the instruction should match it
     :return: an AhmesInstruction
     """
-    return ahmes_instructions[value]
+    if pedantic:
+        instruction = ahmes_instructions[value]
+        if instruction.code != value:
+            raise ValueError("the provided value is not mapped to any instruction")
+        else:
+            return instruction
+    else:
+        return ahmes_instructions[value]
+
+
+def resolve_ahmes_instruction_from_mnemonic(mnemonic):
+    for instruction in ahmes_instructions:
+        if instruction.mnemonic == mnemonic.upper():
+            return instruction
+    return None
