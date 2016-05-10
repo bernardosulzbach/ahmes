@@ -58,13 +58,14 @@ class TestAhmesComputer(unittest.TestCase):
         chosen_value = 127
         chosen_address = 7
         computer = ahmes.AhmesComputer()
+        copy_of_computer_bytes = list(computer.bytes)
         computer.ac = chosen_value
         ahmes.store_function(computer, chosen_address)
         for i, byte in enumerate(computer.bytes):
             if i == chosen_address:
                 self.assertEqual(chosen_value, byte)
             else:
-                self.assertEqual(0, byte)  # All other bytes should still be zero
+                self.assertEqual(copy_of_computer_bytes[i], byte)  # All other bytes should have been left unchanged
 
     def test_store_function_increments_memory_accesses(self):
         computer = ahmes.AhmesComputer()
