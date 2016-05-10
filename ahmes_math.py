@@ -31,6 +31,7 @@ def rotate_left(value):
     assert_is_a_valid_byte_value(value)
     return (value << 1) & 0xFF | ((value & 0x80) >> 7)
 
+
 def rotate_right(value):
     assert_is_a_valid_byte_value(value)
     return (value >> 1) | ((value & 0x01) << 7)
