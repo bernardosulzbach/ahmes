@@ -50,6 +50,7 @@ class AhmesComputer(object):
         self.set_ac(ac)  # Should reuse the AC setter so that the validation step is not duplicated
         self.set_pc(pc)  # Same for PC
         self.bytes = [0] * 256
+        self.running = False
         self.indicators = AhmesIndicators(self)
         self.instructions = 0
         self.memory_accesses = 0
@@ -106,23 +107,9 @@ class AhmesProgram(object):
     A pure Python representation of an Ahmes program.
     """
 
-    def __init__(self, filename):
+    def __init__(self):
         self.initialized = False
-        self.filename = filename
         self.bytes = []
-        self.initialize_bytes()
-
-    def initialize_bytes(self):
-        if not self.initialized:
-            try:
-                with open(self.filename, 'rb') as open_file:
-                    read_bytes = open_file.read()
-                    # The first 4 bytes are not part of the program.
-                    # The remaining of the file seems to be made up of pairs of bytes of which only the first is used.
-                    self.bytes = read_bytes[4::2]
-                    self.initialized = True
-            except FileNotFoundError:
-                pass  # Acceptable, the class handles this exception
 
     def get_bytes(self):
         return self.bytes
@@ -145,6 +132,31 @@ class AhmesProgram(object):
         keys = [i for i in range(256)]
         values = self.bytes
         return make_string_of_key_value_lines(keys, values)
+
+    @classmethod
+    def from_byte_list(cls, byte_list):
+        """
+        Constructs a properly initialized AhmesProgram from a list of bytes.
+        :param byte_list: a list of 256 bytes (integers in the range [0, 255])
+        :return: an AhmesProgram
+        """
+        program = AhmesProgram()
+        program.bytes = byte_list
+        program.initialized = True
+        return program
+
+    @classmethod
+    def from_binary_file(cls, filename):
+        try:
+            with open(filename, 'rb') as open_file:
+                read_bytes = open_file.read()
+                # The first 4 bytes are not part of the program.
+                # The remaining of the file seems to be made up of pairs of bytes of which only the first is used.
+                byte_list = read_bytes[4::2]
+                return AhmesProgram.from_byte_list(byte_list)
+        except FileNotFoundError:
+            pass  # Acceptable, the class handles this exception
+        return None
 
 
 class AhmesInstruction(object):
@@ -265,6 +277,10 @@ def rotate_left_function(ahmes_computer):
     ahmes_computer.ac = ahmes_math.rotate_left(ahmes_computer.ac)
 
 
+def halt_function(ahmes_computer):
+    ahmes_computer.running = False
+
+
 def make_ahmes_instruction_index(pedantic):
     instruction_list = [SingleByteAhmesInstruction(no_op_function, 'NOP', 0),
                         TwoByteAhmesInstruction(store_function, 'STA', 16),
@@ -289,7 +305,7 @@ def make_ahmes_instruction_index(pedantic):
                         SingleByteAhmesInstruction(shift_left_function, 'SHL', 225),
                         SingleByteAhmesInstruction(rotate_right_function, 'ROR', 226),
                         SingleByteAhmesInstruction(rotate_left_function, 'ROL', 227),
-                        SingleByteAhmesInstruction(no_op_function, 'HLT', 240)]
+                        SingleByteAhmesInstruction(halt_function, 'HLT', 240)]
     instruction_index = [None] * 256
     for instruction in instruction_list:
         instruction_index[instruction.code] = instruction
@@ -323,6 +339,6 @@ def resolve_ahmes_instruction(value):
 if __name__ == '__main__':
     computer = AhmesComputer(16, 32)
     print(str(computer))
-    ahmes_program = AhmesProgram('ones.mem')
+    ahmes_program = AhmesProgram.from_binary_file('ones.mem')
     ahmes_program.set_bytes(ahmes_program.get_bytes())
     print(str(ahmes_program))
