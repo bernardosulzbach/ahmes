@@ -238,10 +238,21 @@ def store_function(ahmes_computer, address):
     ahmes_computer.store_byte(address, ahmes_computer.ac)
 
 
+def load_function(ahmes_computer, address):
+    """
+    The function of the load instruction. Loads the value at the specifed address on the accumulator using load_byte.
+    :param ahmes_computer: an AhmesComputer
+    :param address: a valid address
+    :return: None
+    """
+    ahmes_math.assert_is_a_valid_byte_value(address)
+    ahmes_computer.load_byte(address)
+
+
 def make_ahmes_instruction_index(pedantic):
     instruction_list = [SingleByteAhmesInstruction(no_op_function, 'NOP', 0),
                         TwoByteAhmesInstruction(store_function, 'STA', 16),
-                        TwoByteAhmesInstruction(no_op_function, 'LDA', 32),
+                        TwoByteAhmesInstruction(load_function, 'LDA', 32),
                         TwoByteAhmesInstruction(no_op_function, 'ADD', 48),
                         TwoByteAhmesInstruction(no_op_function, 'OR', 64),
                         TwoByteAhmesInstruction(no_op_function, 'AND', 80),

@@ -73,3 +73,19 @@ class TestAhmesComputer(unittest.TestCase):
         ahmes.store_function(computer, 128)
         memory_accesses_after_store = computer.memory_accesses
         self.assertEqual(memory_accesses_before_store + 1, memory_accesses_after_store)
+
+    def test_load_function_does_not_change_any_byte(self):
+        chosen_address = 7
+        computer = ahmes.AhmesComputer()
+        copy_of_computer_bytes = list(computer.bytes)
+        ahmes.load_function(computer, chosen_address)
+        for i, byte in enumerate(computer.bytes):
+            self.assertEqual(copy_of_computer_bytes[i], byte)
+
+    def test_load_function_increments_memory_accesses(self):
+        computer = ahmes.AhmesComputer()
+        memory_accesses_before_load = computer.memory_accesses
+        ahmes.load_function(computer, 128)
+        memory_accesses_after_load = computer.memory_accesses
+        ahmes.load_function(computer, 128)
+        self.assertEqual(memory_accesses_before_load + 1, memory_accesses_after_load)
